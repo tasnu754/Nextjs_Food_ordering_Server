@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import {
   generateAccessToken,
@@ -97,6 +98,80 @@ export async function loginUser(req, res) {
       message: "Something went wrong",
       error: err instanceof Error ? err.message : err,
       errorType: err instanceof Error ? err.name : "Error",
+    });
+  }
+}
+
+export async function refreshToken(req, res) {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    console.log(refreshToken);
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        ok: false,
+        message: "Refresh token not found",
+      });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    const user = await User.findById(decoded.userId);
+
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        message: "User not found",
+      });
+    }
+
+    const newAccessToken = generateAccessToken(user._id);
+
+    res.status(200).json({
+      ok: true,
+      message: "Token refreshed successfully",
+      data: {
+        accessToken: newAccessToken,
+      },
+    });
+  } catch (err) {
+    if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
+      return res.status(401).json({
+        ok: false,
+        message: "Invalid or expired refresh token",
+      });
+    }
+
+    res.status(500).json({
+      ok: false,
+      message: "Something went wrong",
+      error: err instanceof Error ? err.message : err,
+    });
+  }
+}
+
+export async function logoutUser(req, res) {
+  try {
+    const userId = req.user?.userId;
+
+    if (userId) {
+      const user = await User.findById(userId);
+      if (user) {
+        await user.handleLogout();
+      }
+    }
+
+    res.clearCookie("refreshToken");
+
+    res.status(200).json({
+      ok: true,
+      message: "Logout successful",
+    });
+  } catch (err) {
+    res.status(500).json({
+      ok: false,
+      message: "Something went wrong",
+      error: err instanceof Error ? err.message : err,
     });
   }
 }

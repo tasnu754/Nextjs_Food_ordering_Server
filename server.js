@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/auth.routes.js";
 import userRoutes from "./src/routes/user.routes.js";
@@ -8,17 +9,23 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
-
-app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/user", userRoutes);
 
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
 });
+
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/user", userRoutes);
 
 // Health check route
 app.get("/health", (req, res) => {

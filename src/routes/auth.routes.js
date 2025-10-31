@@ -6,6 +6,7 @@ router.use(urlencoded({ extended: true }));
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-// router.post("/logout", logoutUser);
+router.post("/refresh", refreshToken);
+router.post("/logout", authenticate, logoutUser);
 
 export default router;
