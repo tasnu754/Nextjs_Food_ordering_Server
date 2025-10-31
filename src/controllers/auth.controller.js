@@ -152,7 +152,7 @@ export async function refreshToken(req, res) {
 
 export async function logoutUser(req, res) {
   try {
-    const userId = req.user?.userId;
+    const userId = req.user?._id;
 
     if (userId) {
       const user = await User.findById(userId);

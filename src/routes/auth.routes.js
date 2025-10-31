@@ -1,8 +1,23 @@
-import { Router, urlencoded } from "express";
-import { registerUser, loginUser } from "../controllers/auth.controller.js";
+import { Router } from "express";
+import {
+  registerUser,
+  loginUser,
+  refreshToken,
+  logoutUser,
+} from "../controllers/auth.controller.js";
+import { authenticate } from "../middleware/auth.middleware.js";
+
 const router = Router();
 
-router.use(urlencoded({ extended: true }));
+router.get("/profile", authenticate, async (req, res) => {
+  res.json({
+    ok: true,
+    data: {
+      user: req.user,
+      message: "This is a protected route",
+    },
+  });
+});
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);

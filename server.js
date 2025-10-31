@@ -24,6 +24,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// 🎯 ADD THIS DEBUG MIDDLEWARE
+app.use((req, res, next) => {
+  console.log("🚀 INCOMING REQUEST:", req.method, req.url);
+  console.log("📁 Full URL:", req.originalUrl);
+  next();
+});
+
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 

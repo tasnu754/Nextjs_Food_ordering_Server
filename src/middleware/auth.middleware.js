@@ -3,16 +3,16 @@ import User from "../models/user.model.js";
 
 export async function authenticate(req, res, next) {
   try {
-    const authHeader = req.headers.authorization;
+    const authHeader = req?.headers?.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!authHeader || !authHeader?.startsWith("Bearer ")) {
       return res.status(401).json({
         ok: false,
         message: "Access token not found",
       });
     }
 
-    const token = authHeader.split(" ")[1];
+    const token = authHeader?.split(" ")[1];
 
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
 
