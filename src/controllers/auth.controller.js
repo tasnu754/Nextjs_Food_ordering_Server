@@ -104,35 +104,35 @@ export async function loginUser(req, res) {
 
 export async function refreshToken(req, res) {
   try {
-    const refreshToken = req.cookies.refreshToken;
-    console.log(refreshToken);
+    const oldRefreshToken = req.cookies.refreshToken;
 
-    if (!refreshToken) {
-      return res.status(401).json({
-        ok: false,
-        message: "Refresh token not found",
-      });
+    if (!oldRefreshToken) {
+      return res
+        .status(401)
+        .json({ ok: false, message: "Refresh token not found" });
     }
 
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-
+    const decoded = jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
     const user = await User.findById(decoded.userId);
 
     if (!user) {
-      return res.status(401).json({
-        ok: false,
-        message: "User not found",
-      });
+      return res.status(401).json({ ok: false, message: "User not found" });
     }
 
     const newAccessToken = generateAccessToken(user._id);
+    const newRefreshToken = generateRefreshToken(user._id);
 
-    res.status(200).json({
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({
       ok: true,
       message: "Token refreshed successfully",
-      data: {
-        accessToken: newAccessToken,
-      },
+      data: { accessToken: newAccessToken },
     });
   } catch (err) {
     if (err.name === "JsonWebTokenError" || err.name === "TokenExpiredError") {
