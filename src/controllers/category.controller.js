@@ -52,6 +52,28 @@ export async function addCategory(req, res) {
   }
 }
 
+export async function getAllCategories(req, res) {
+  try {
+    const categories = await Category.find().sort({ createdAt: -1 });
+    const analytics = await getCategoryAnalytics();
+
+    res.json({
+      success: true,
+      data: {
+        categories,
+        analytics,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching categories:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching categories",
+      error: error.message,
+    });
+  }
+}
+
 async function getCategoryAnalytics() {
   try {
     const totalCategories = await Category.countDocuments();
