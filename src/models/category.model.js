@@ -18,18 +18,38 @@ const categorySchema = new Schema(
       type: String,
       trim: true,
     },
+    productCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-// Generate slug before saving
 categorySchema.pre("save", function (next) {
   if (this.isModified("name")) {
     this.slug = this.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
   }
   next();
 });
+
+categorySchema.virtual("isPopular").get(function () {
+  return this.productCount > 10; // Adjust threshold as needed
+});
+
+categorySchema.methods.incrementProductCount = function () {
+  this.productCount += 1;
+  return this.save();
+};
+
+categorySchema.methods.decrementProductCount = function () {
+  this.productCount = Math.max(0, this.productCount - 1);
+  return this.save();
+};
+
+categorySchema.set("toJSON", { virtuals: true });
 
 export default model("Category", categorySchema);
