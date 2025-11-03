@@ -1,4 +1,3 @@
-// models/Category.js
 import { Schema, model } from "mongoose";
 
 const categorySchema = new Schema(
@@ -18,7 +17,7 @@ const categorySchema = new Schema(
       type: String,
       trim: true,
     },
-    productCount: {
+    itemCount: {
       type: Number,
       default: 0,
       min: 0,
@@ -37,16 +36,16 @@ categorySchema.pre("save", function (next) {
 });
 
 categorySchema.virtual("isPopular").get(function () {
-  return this.productCount > 10; // Adjust threshold as needed
+  return this.itemCount > 7;
 });
 
-categorySchema.methods.incrementProductCount = function () {
-  this.productCount += 1;
+categorySchema.methods.incrementItemCount = function () {
+  this.itemCount += 1;
   return this.save();
 };
 
-categorySchema.methods.decrementProductCount = function () {
-  this.productCount = Math.max(0, this.productCount - 1);
+categorySchema.methods.decrementItemCount = function () {
+  this.itemCount = Math.max(0, this.itemCount - 1);
   return this.save();
 };
 

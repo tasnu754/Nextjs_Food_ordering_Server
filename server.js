@@ -2,8 +2,10 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import connectDB from "./src/config/database.js";
-import authRoutes from "./src/routes/auth.routes.js";
-import userRoutes from "./src/routes/user.routes.js";
+import authRoutes from "./src/routes/auth.route.js";
+import userRoutes from "./src/routes/user.route.js";
+import foodRoutes from "./src/routes/foodItem.route.js";
+import categoryRoutes from "./src/routes/category.route.js";
 
 const app = express();
 
@@ -26,6 +28,8 @@ app.use((req, res, next) => {
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/food", foodRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 // Health check route
 app.get("/health", (req, res) => {

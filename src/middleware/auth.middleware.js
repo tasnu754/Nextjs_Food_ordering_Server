@@ -50,7 +50,7 @@ export async function authenticate(req, res, next) {
   }
 }
 
-export const requireAdmin = async (req, res, next) => {
+export const authorize = async (req, res, next) => {
   try {
     const userId = req.user?._id || req.body.userId || req.query.userId;
 
