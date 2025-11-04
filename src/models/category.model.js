@@ -22,6 +22,16 @@ const categorySchema = new Schema(
       default: 0,
       min: 0,
     },
+    image: {
+      url: {
+        type: String,
+        default: null,
+      },
+      publicId: {
+        type: String,
+        default: null,
+      },
+    },
   },
   {
     timestamps: true,
