@@ -7,7 +7,6 @@ export async function addCategory(req, res) {
     const { name, description } = req.body;
 
     if (!name || !name.trim()) {
-      // Clean up uploaded image if validation fails
       if (req.file) {
         await cloudinary.uploader.destroy(req.file.filename);
       }
@@ -22,7 +21,6 @@ export async function addCategory(req, res) {
     });
 
     if (existingCategory) {
-      // Clean up uploaded image if category exists
       if (req.file) {
         await cloudinary.uploader.destroy(req.file.filename);
       }
@@ -37,7 +35,6 @@ export async function addCategory(req, res) {
       description: description?.trim(),
     };
 
-    // Add image data if file was uploaded
     if (req.file) {
       categoryData.image = {
         url: req.file.path,
@@ -56,7 +53,6 @@ export async function addCategory(req, res) {
       data: categoryResponse,
     });
   } catch (error) {
-    // Clean up uploaded image if error occurs
     if (req.file) {
       try {
         await cloudinary.uploader.destroy(req.file.filename);

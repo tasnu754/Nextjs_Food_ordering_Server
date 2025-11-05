@@ -41,7 +41,7 @@ const categoryStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "food-categories",
-    allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
+    allowed_formats: ["jpg", "jpeg", "jfif", "png", "webp", "gif"],
     transformation: [{ width: 500, height: 500, crop: "limit" }],
   },
 });
@@ -51,7 +51,7 @@ const foodStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "food-items",
-    allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
+    allowed_formats: ["jpg", "jpeg", "jfif", "png", "webp", "gif"],
     transformation: [{ width: 800, height: 600, crop: "limit" }],
   },
 });

@@ -172,3 +172,89 @@ export const createFoodItem = async (req, res) => {
     });
   }
 };
+
+// export const getAllFoodItems = async (req, res) => {
+//   try {
+//     // You can add query parameters for filtering, pagination, etc.
+//     const { category, featured, limit, page } = req.query;
+
+//     let query = {};
+
+//     // Filter by category if provided
+//     if (category) {
+//       query.category = category;
+//     }
+
+//     // Filter by featured items if provided
+//     if (featured) {
+//       query.isFeatured = featured === 'true';
+//     }
+
+//     // Pagination
+//     const pageNumber = parseInt(page) || 1;
+//     const pageSize = parseInt(limit) || 10;
+//     const skip = (pageNumber - 1) * pageSize;
+
+//     const foodItems = await FoodItem.find(query)
+//       .populate('category', 'name slug')
+//       .sort({ createdAt: -1 })
+//       .skip(skip)
+//       .limit(pageSize);
+
+//     // Get total count for pagination
+//     const totalItems = await FoodItem.countDocuments(query);
+//     const totalPages = Math.ceil(totalItems / pageSize);
+
+//     res.json({
+//       success: true,
+//       data: {
+//         foodItems,
+//         pagination: {
+//           currentPage: pageNumber,
+//           totalPages,
+//           totalItems,
+//           hasNext: pageNumber < totalPages,
+//           hasPrev: pageNumber > 1
+//         }
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Error fetching Food Items:", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error fetching food items",
+//       error: error.message,
+//     });
+//   }
+// };
+
+export const getAllFoodItems = async (req, res) => {
+  try {
+    console.log("GET /api/food route hit");
+    const { category, featured } = req.query;
+
+    let query = {};
+
+    if (category) {
+      query.category = category;
+    }
+
+    const foodItems = await FoodItem.find(query)
+      .populate("category", "name slug")
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: {
+        foodItems,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching Food Items:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching food items",
+      error: error.message,
+    });
+  }
+};
