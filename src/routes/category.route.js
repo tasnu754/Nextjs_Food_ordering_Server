@@ -5,13 +5,26 @@ import {
   updateCategory,
   deleteCategory,
 } from "../controllers/category.controller.js";
-import { upload } from "../config/cloudinary.js";
+import { uploadCategory } from "../config/cloudinary.js";
+import { authenticate, authorize } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/", upload.single("image"), addCategory);
+router.post(
+  "/",
+  authenticate,
+  authorize,
+  uploadCategory.single("image"),
+  addCategory
+);
 router.get("/", getAllCategories);
-router.put("/:id", upload.single("image"), updateCategory);
-router.delete("/:id", deleteCategory);
+router.put(
+  "/:id",
+  authenticate,
+  authorize,
+  uploadCategory.single("image"),
+  updateCategory
+);
+router.delete("/:id", authenticate, authorize, deleteCategory);
 
 export default router;

@@ -1,29 +1,5 @@
 import { Schema, model } from "mongoose";
 
-const variantSchema = new Schema(
-  {
-    size: {
-      type: String,
-      enum: ["Small", "Regular", "Large", "Extra Large"],
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    weight: {
-      type: String,
-      required: true,
-    },
-    isAvailable: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  { _id: false }
-);
-
 const reviewSchema = new Schema(
   {
     userId: {
@@ -107,7 +83,12 @@ const foodItemSchema = new Schema(
       required: [true, "Category is required"],
       index: true,
     },
-    variants: [variantSchema],
+    variants: [
+      {
+        type: String,
+        enum: ["small", "regular", "large", "extra large"],
+      },
+    ],
     shortDescription: {
       type: String,
       required: [true, "Short description (ingredients) is required"],
