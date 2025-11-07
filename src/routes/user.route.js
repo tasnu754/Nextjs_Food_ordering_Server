@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getUserProfile,
   getAllUsers,
   deleteUser,
   makeAdmin,
@@ -11,6 +12,7 @@ import { uploadProfile } from "../config/cloudinary.js";
 
 const router = Router();
 
+router.get("/profile/:userId", getUserProfile);
 router.get("/allUsers", authenticate, authorize, getAllUsers);
 router.delete("/delete/:userId", authenticate, authorize, deleteUser);
 router.patch("/make-admin/:userId", authenticate, authorize, makeAdmin);

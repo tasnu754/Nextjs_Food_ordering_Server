@@ -108,7 +108,6 @@ export async function updateCategory(req, res) {
       });
     }
 
-    // Check if new name conflicts with existing category
     if (name && name !== category.name) {
       const existingCategory = await Category.findOne({
         name: { $regex: new RegExp(`^${name}$`, "i") },
@@ -126,13 +125,10 @@ export async function updateCategory(req, res) {
       }
     }
 
-    // Update basic fields
     if (name) category.name = name.trim();
     if (description !== undefined) category.description = description.trim();
 
-    // Handle image update
     if (req.file) {
-      // Delete old image if exists
       if (category.image?.publicId) {
         try {
           await cloudinary.uploader.destroy(category.image.publicId);
@@ -141,7 +137,6 @@ export async function updateCategory(req, res) {
         }
       }
 
-      // Set new image
       category.image = {
         url: req.file.path,
         publicId: req.file.filename,

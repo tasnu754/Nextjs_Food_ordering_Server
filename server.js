@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/auth.route.js";
 import userRoutes from "./src/routes/user.route.js";
 import foodRoutes from "./src/routes/foodItem.route.js";
 import categoryRoutes from "./src/routes/category.route.js";
+import cartRoutes from "./routes/cartRoutes.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/food", foodRoutes);
 app.use("/api/v1/category", categoryRoutes);
+app.use("/api/v1/cart", cartRoutes);
 
 // Health check route
 app.get("/health", (req, res) => {

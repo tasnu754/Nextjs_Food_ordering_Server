@@ -290,7 +290,8 @@ export const updateFoodItem = async (req, res) => {
     if (req.files?.thumbnail && req.files.thumbnail[0]) {
       // Delete old thumbnail from Cloudinary
       if (foodItem.thumbnail) {
-        const publicId = getPublicIdFromUrl(foodItem.thumbnail);
+        // const publicId = getPublicIdFromUrl(foodItem.thumbnail);
+        const publicId = foodItem?.thumbnail?.publicId;
         if (publicId) {
           try {
             await cloudinary.uploader.destroy(publicId);
@@ -307,7 +308,8 @@ export const updateFoodItem = async (req, res) => {
       // Delete old additional images from Cloudinary
       if (foodItem.additionalImages && foodItem.additionalImages.length > 0) {
         for (const imageUrl of foodItem.additionalImages) {
-          const publicId = getPublicIdFromUrl(imageUrl);
+          // const publicId = getPublicIdFromUrl(imageUrl);
+          const publicId = imageUrl?.publicId;
           if (publicId) {
             try {
               await cloudinary.uploader.destroy(publicId);
