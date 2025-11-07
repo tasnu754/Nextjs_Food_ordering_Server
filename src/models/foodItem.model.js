@@ -133,7 +133,7 @@ foodItemSchema.methods.calculateAverageRating = function () {
     this.totalReviews = 0;
   } else {
     const sum = this.reviews.reduce((acc, review) => acc + review.stars, 0);
-    this.averageRating = (sum / this.reviews.length).toFixed(1);
+    this.averageRating = sum / this.reviews.length;
     this.totalReviews = this.reviews.length;
   }
 };

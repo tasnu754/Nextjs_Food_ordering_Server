@@ -72,7 +72,7 @@ export async function addCategory(req, res) {
 
 export async function getAllCategories(req, res) {
   try {
-    const categories = await Category.find().sort({ createdAt: -1 });
+    const categories = await Category.find().sort({ createdAt: 1 });
     const analytics = await getCategoryAnalytics();
 
     res.json({
@@ -193,7 +193,6 @@ export async function deleteCategory(req, res) {
       });
     }
 
-    // Delete image from Cloudinary if exists
     if (category.image?.publicId) {
       try {
         await cloudinary.uploader.destroy(category.image.publicId);
