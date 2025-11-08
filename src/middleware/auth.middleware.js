@@ -93,19 +93,15 @@ export const protect = async (req, res, next) => {
   try {
     let token;
 
-    // Check for token in Authorization header or cookies
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      // Get token from Authorization header
       token = req.headers.authorization.split(" ")[1];
     } else if (req.cookies.token) {
-      // Get token from cookies
       token = req.cookies.token;
     }
 
-    // Check if token exists
     if (!token) {
       return res.status(401).json({
         success: false,
@@ -113,10 +109,8 @@ export const protect = async (req, res, next) => {
       });
     }
 
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Get user from token and attach to request
     req.user = await User.findById(decoded.id).select("-password");
 
     if (!req.user) {
@@ -147,6 +141,17 @@ export const protect = async (req, res, next) => {
     res.status(401).json({
       success: false,
       message: "Not authorized",
+    });
+  }
+};
+
+export const admin = (req, res, next) => {
+  if (req.user && req.user.role === "admin") {
+    next();
+  } else {
+    res.status(403).json({
+      success: false,
+      message: "Not authorized as admin. Admin access required.",
     });
   }
 };
