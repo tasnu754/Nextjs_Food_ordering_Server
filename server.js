@@ -6,7 +6,7 @@ import authRoutes from "./src/routes/auth.route.js";
 import userRoutes from "./src/routes/user.route.js";
 import foodRoutes from "./src/routes/foodItem.route.js";
 import categoryRoutes from "./src/routes/category.route.js";
-import cartRoutes from "./routes/cart.route.js";
+import cartRoutes from "./src/routes/cart.route.js";
 
 const app = express();
 

@@ -70,10 +70,10 @@ cartSchema.pre("save", function (next) {
   );
 
   // Set delivery fee based on subtotal
-  if (this.subtotal > 50) {
+  if (this.subtotal > 200) {
     this.deliveryFee = 0; // Free delivery over $50
   } else if (this.subtotal > 0) {
-    this.deliveryFee = 5;
+    this.deliveryFee = 8;
   } else {
     this.deliveryFee = 0;
   }
