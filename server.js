@@ -10,6 +10,7 @@ import cartRoutes from "./src/routes/cart.route.js";
 import orderRoutes from "./src/routes/order.route.js";
 import wishlistRoutes from "./src/routes/wishlist.route.js";
 import reviewRoutes from "./src/routes/review.route.js";
+import dashboardRoutes from "./src/routes/dashboard.route.js";
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/v1/cart", cartRoutes);
 app.use("/api/v1/orders", orderRoutes);
 app.use("/api/v1/wishlist", wishlistRoutes);
 app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/dashboard", dashboardRoutes);
 
 // Health check route
 app.get("/health", (req, res) => {
