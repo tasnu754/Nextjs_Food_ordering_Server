@@ -8,6 +8,8 @@ import foodRoutes from "./src/routes/foodItem.route.js";
 import categoryRoutes from "./src/routes/category.route.js";
 import cartRoutes from "./src/routes/cart.route.js";
 import orderRoutes from "./src/routes/order.route.js";
+import wishlistRoutes from "./src/routes/wishlist.route.js";
+import reviewRoutes from "./src/routes/review.route.js";
 
 const app = express();
 
@@ -33,7 +35,9 @@ app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/food", foodRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/cart", cartRoutes);
-app.use("/api/orders", orderRoutes);
+app.use("/api/v1/orders", orderRoutes);
+app.use("/api/v1/wishlist", wishlistRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
 
 // Health check route
 app.get("/health", (req, res) => {
