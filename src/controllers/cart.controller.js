@@ -4,7 +4,8 @@ import FoodItem from "../models/foodItem.model.js";
 // Get user's cart
 export const getCart = async (req, res) => {
   try {
-    let cart = await Cart.findOne({ userId: req.user._id }).populate({
+    const userId = req.query.id || req.user._id;
+    let cart = await Cart.findOne({ userId }).populate({
       path: "items.foodItem",
       select: "foodName thumbnail price isAvailable",
     });
