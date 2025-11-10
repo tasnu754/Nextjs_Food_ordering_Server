@@ -80,7 +80,7 @@ const orderSchema = new Schema(
     orderNumber: {
       type: String,
       unique: true,
-      required: true,
+      sparse: true,
     },
     user: {
       type: Schema.Types.ObjectId,
@@ -186,31 +186,40 @@ const orderSchema = new Schema(
 );
 
 orderSchema.pre("save", async function (next) {
-  if (this.isNew) {
-    const date = new Date();
-    const year = date.getFullYear().toString().slice(-2);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
+  if (this.isNew && !this.orderNumber) {
+    try {
+      const date = new Date();
+      const year = date.getFullYear().toString().slice(-2);
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const day = date.getDate().toString().padStart(2, "0");
 
-    const todayStart = new Date(date.setHours(0, 0, 0, 0));
-    const todayEnd = new Date(date.setHours(23, 59, 59, 999));
+      const todayStart = new Date();
+      todayStart.setHours(0, 0, 0, 0);
+      const todayEnd = new Date();
+      todayEnd.setHours(23, 59, 59, 999);
 
-    const count = await this.constructor.countDocuments({
-      createdAt: { $gte: todayStart, $lte: todayEnd },
-    });
+      const count = await this.constructor.countDocuments({
+        createdAt: { $gte: todayStart, $lte: todayEnd },
+      });
 
-    this.orderNumber = `ORD${year}${month}${day}${(count + 1)
-      .toString()
-      .padStart(4, "0")}`;
+      this.orderNumber = `ORD${year}${month}${day}${(count + 1)
+        .toString()
+        .padStart(4, "0")}`;
 
-    this.statusHistory.push({
-      status: this.orderStatus,
-      timestamp: new Date(),
-    });
+      if (!this.statusHistory || this.statusHistory.length === 0) {
+        this.statusHistory.push({
+          status: this.orderStatus,
+          timestamp: new Date(),
+        });
+      }
+    } catch (error) {
+      return next(error);
+    }
   }
   next();
 });
 
+// Update status with history tracking
 orderSchema.methods.updateStatus = function (newStatus, updatedBy, note = "") {
   this.orderStatus = newStatus;
   this.statusHistory.push({
@@ -220,6 +229,7 @@ orderSchema.methods.updateStatus = function (newStatus, updatedBy, note = "") {
     note,
   });
 
+  // Set specific timestamps
   if (newStatus === "delivered") {
     this.deliveredAt = new Date();
   } else if (newStatus === "cancelled") {
@@ -229,6 +239,7 @@ orderSchema.methods.updateStatus = function (newStatus, updatedBy, note = "") {
   return this.save();
 };
 
+// Cancel order
 orderSchema.methods.cancelOrder = function (reason, cancelledBy) {
   this.orderStatus = "cancelled";
   this.cancelledAt = new Date();

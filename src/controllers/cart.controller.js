@@ -1,7 +1,6 @@
 import Cart from "../models/cart.model.js";
 import FoodItem from "../models/foodItem.model.js";
 
-// Get user's cart
 export const getCart = async (req, res) => {
   try {
     const userId = req.query.id || req.user._id;
@@ -11,7 +10,6 @@ export const getCart = async (req, res) => {
     });
 
     if (!cart) {
-      // Create a new cart if it doesn't exist
       cart = await Cart.create({ userId: req.user._id, items: [] });
     }
 
@@ -28,7 +26,6 @@ export const getCart = async (req, res) => {
   }
 };
 
-// Add item to cart
 export const addToCart = async (req, res) => {
   try {
     const { foodItemId, quantity = 1, variant = "regular" } = req.body;
@@ -78,7 +75,6 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// Update item quantity
 export const updateCartItem = async (req, res) => {
   try {
     const { itemId } = req.params;
@@ -119,7 +115,6 @@ export const updateCartItem = async (req, res) => {
   }
 };
 
-// Remove item from cart
 export const removeFromCart = async (req, res) => {
   try {
     const { itemId } = req.params;
@@ -152,7 +147,6 @@ export const removeFromCart = async (req, res) => {
   }
 };
 
-// Clear cart
 export const clearCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ userId: req.user._id });
@@ -179,7 +173,6 @@ export const clearCart = async (req, res) => {
   }
 };
 
-// Increment item quantity
 export const incrementCartItem = async (req, res) => {
   try {
     const { itemId } = req.params;
@@ -221,7 +214,6 @@ export const incrementCartItem = async (req, res) => {
   }
 };
 
-// Decrement item quantity
 export const decrementCartItem = async (req, res) => {
   try {
     const { itemId } = req.params;

@@ -49,7 +49,7 @@ export const createOrder = async (req, res) => {
       paymentMethod,
       paymentStatus: paymentMethod === "cash_on_delivery" ? "pending" : "paid",
       subtotal: cart.subtotal,
-      tax: cart.tax,
+      tax: cart.tax || 0,
       deliveryFee: cart.deliveryFee,
       total: cart.total,
       totalItems: cart.totalItems,
