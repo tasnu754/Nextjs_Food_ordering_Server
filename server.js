@@ -18,7 +18,11 @@ connectDB();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5000",
+    origin: [
+      "http://localhost:3000",
+      "https://nextjs-food-ordering.vercel.app",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );
