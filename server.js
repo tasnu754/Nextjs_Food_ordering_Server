@@ -20,7 +20,7 @@ app.use(
   cors({
     origin: [
       "https://nextjs-food-ordering.vercel.app",
-      "http://localhost:5000",
+      "http://localhost:3000",
     ],
     credentials: true,
   })
