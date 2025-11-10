@@ -21,7 +21,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://nextjs-food-ordering.vercel.app",
-      "http://localhost:3000",
+      "http://localhost:5000",
     ],
     credentials: true,
   })
